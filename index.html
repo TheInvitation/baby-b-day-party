@@ -1,900 +1,1176 @@
 <!DOCTYPE html>
-<html lang="hy">
+<html lang="hy" style="">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<meta content="mobile_blank" name="shell-type">
 
-  <title>Մեր Փոքրիկի 1 Տարեկանը</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.tailwindcss.com"></script>
+<style>
+@layer base{
+  html,body{
+    width:100vw;
+    margin:0;
+    padding:0;
+    background-color:#fff8f5;
+  }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  body{
+    overscroll-behavior:none;
+    -webkit-tap-highlight-color:transparent;
+  }
 
-  <style>
-    body {
-      margin: 0;
-      background: #fff8f5;
-      color: #4b3832;
-      font-family: "Plus Jakarta Sans", sans-serif;
-    }
+  .pb-safe{
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
 
-    h1, h2, h3 {
-      font-family: "Noto Serif", serif;
-    }
+  .pt-safe{
+    padding-top:env(safe-area-inset-top,0px);
+  }
 
-    /* ENVELOPE */
-    #envelope-section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,.9), transparent 50%),
-        #fff8f5;
-      transition:
-        opacity .7s ease,
-        transform .7s ease,
-        visibility .7s ease;
-    }
+  main>:first-child{
+    margin-top:0!important;
+  }
 
-    #envelope-section.opening {
-      opacity: 0;
-      transform: scale(1.04);
-      visibility: hidden;
-    }
+  main>:last-child{
+    margin-bottom:0!important;
+  }
+}
 
-    .envelope-wrapper {
-      width: 100%;
-      max-width: 520px;
-      text-align: center;
-    }
+::-webkit-scrollbar{
+  display:none;
+}
 
-    .envelope-card {
-      position: relative;
-      margin: 30px auto;
-      width: min(100%, 430px);
-      aspect-ratio: 1.45 / 1;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 20px 60px rgba(92, 58, 45, .12);
-      overflow: hidden;
-      border: 1px solid rgba(120, 80, 60, .08);
-    }
+/* ENVELOPE OPENING ANIMATION */
+#envelope-section{
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s ease,
+    max-height 0.75s ease,
+    margin 0.75s ease,
+    padding 0.75s ease;
+  max-height:1200px;
+}
 
-    .envelope-back {
-      position: absolute;
-      inset: 0;
-      background: #f5ddd5;
-    }
+#envelope-section.opening{
+  opacity:0;
+  transform:scale(0.96) translateY(-20px);
+  max-height:0;
+  margin-top:0;
+  margin-bottom:0;
+  padding-top:0;
+  padding-bottom:0;
+  pointer-events:none;
+}
 
-    .envelope-flap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-left: 50% solid transparent;
-      border-right: 50% solid transparent;
-      border-top: 48% solid #efd0c7;
-      z-index: 3;
-    }
+/* INVITATION IS HIDDEN AT FIRST */
+#invitation-content{
+  opacity:0;
+  visibility:hidden;
+  max-height:0;
+  overflow:hidden;
+  transform:translateY(25px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease,
+    max-height 1s ease,
+    visibility 0s linear 1s;
+}
 
-    .envelope-left {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 0;
-      border-top: 100% solid transparent;
-      border-bottom: 0 solid transparent;
-      border-left: 50% solid #f2d8d0;
-      z-index: 2;
-    }
+/* INVITATION APPEARS AFTER OPENING */
+#invitation-content.show{
+  opacity:1;
+  visibility:visible;
+  max-height:100000px;
+  overflow:visible;
+  transform:translateY(0);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease,
+    max-height 1s ease,
+    visibility 0s linear 0s;
+}
+</style>
 
-    .envelope-right {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      width: 0;
-      height: 0;
-      border-top: 100% solid transparent;
-      border-bottom: 0 solid transparent;
-      border-right: 50% solid #f2d8d0;
-      z-index: 2;
-    }
+<script src="https://cdn.tailwindcss.com"></script>
 
-    .envelope-bottom {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 0;
-      border-left: 50% solid transparent;
-      border-right: 50% solid transparent;
-      border-bottom: 58% solid #eacbc1;
-      z-index: 4;
-    }
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      "colors": {
+        "on-secondary-container": "#785a1a",
+        "on-surface-variant": "#504445",
+        "secondary-fixed-dim": "#e9c176",
+        "inverse-primary": "#efb9be",
+        "tertiary": "#72585a",
+        "surface-container-high": "#f0e6e2",
+        "surface-variant": "#ebe0dc",
+        "inverse-surface": "#352f2d",
+        "secondary-fixed": "#ffdea5",
+        "primary": "#7d5358",
+        "on-secondary-fixed-variant": "#5d4201",
+        "on-tertiary": "#ffffff",
+        "tertiary-container": "#caa9ac",
+        "surface-dim": "#e2d8d4",
+        "on-secondary-fixed": "#261900",
+        "surface-container-lowest": "#ffffff",
+        "primary-fixed": "#ffd9dc",
+        "on-primary-container": "#5f393e",
+        "surface": "#fff8f5",
+        "on-primary-fixed-variant": "#633c41",
+        "on-error-container": "#93000a",
+        "error-container": "#ffdad6",
+        "on-error": "#ffffff",
+        "tertiary-fixed": "#fedadd",
+        "on-primary": "#ffffff",
+        "surface-bright": "#fff8f5",
+        "on-secondary": "#ffffff",
+        "outline-variant": "#d4c2c3",
+        "surface-container-low": "#fcf1ed",
+        "on-tertiary-fixed-variant": "#594043",
+        "tertiary-fixed-dim": "#e1bec1",
+        "secondary": "#775a19",
+        "error": "#ba1a1a",
+        "surface-tint": "#7d5358",
+        "surface-container": "#f6ece7",
+        "on-tertiary-container": "#563d40",
+        "on-surface": "#1f1b18",
+        "on-tertiary-fixed": "#2a1619",
+        "background": "#fff8f5",
+        "on-primary-fixed": "#301217",
+        "inverse-on-surface": "#f9efea",
+        "primary-fixed-dim": "#efb9be",
+        "surface-container-highest": "#ebe0dc",
+        "on-background": "#1f1b18",
+        "outline": "#827374",
+        "primary-container": "#d8a4a9",
+        "secondary-container": "#fed488"
+      },
 
-    .wax-seal {
-      position: absolute;
-      z-index: 10;
-      left: 50%;
-      top: 52%;
-      transform: translate(-50%, -50%);
-      width: 74px;
-      height: 74px;
-      border-radius: 50%;
-      background: #b76e5d;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Noto Serif", serif;
-      font-size: 18px;
-      box-shadow: 0 8px 25px rgba(110, 57, 45, .22);
-      cursor: pointer;
-      border: 3px solid rgba(255,255,255,.65);
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
+      "borderRadius": {
+        "DEFAULT": "0.25rem",
+        "lg": "0.5rem",
+        "xl": "0.75rem",
+        "full": "9999px"
+      },
 
-    .wax-seal:hover {
-      transform: translate(-50%, -50%) scale(1.06);
-      box-shadow: 0 10px 30px rgba(110, 57, 45, .28);
-    }
+      "spacing": {
+        "space-lg": "1.75rem",
+        "gutter-lg": "2rem",
+        "gutter": "1.25rem",
+        "space-xs": "0.25rem",
+        "margin": "1.25rem",
+        "margin-md": "2.5rem",
+        "space-sm": "0.5rem",
+        "space-xl": "3rem",
+        "margin-lg": "4rem",
+        "space-md": "1rem"
+      },
 
-    .wax-seal:disabled {
-      cursor: default;
-    }
+      "fontFamily": {
+        "body-md": ["Plus Jakarta Sans"],
+        "body-lg": ["Plus Jakarta Sans"],
+        "label-lg": ["Plus Jakarta Sans"],
+        "headline-lg": ["Noto Serif"],
+        "display-lg-mobile": ["Noto Serif"],
+        "headline-sm": ["Noto Serif"],
+        "headline-lg-mobile": ["Noto Serif"],
+        "title-md": ["Noto Serif"],
+        "headline-md": ["Noto Serif"],
+        "display-lg": ["Noto Serif"],
+        "label-sm": ["Plus Jakarta Sans"]
+      },
 
-    /* INVITATION */
-    #invitation-content {
-      display: none;
-      opacity: 0;
-    }
+      "fontSize": {
+        "body-md": ["14px", {
+          "lineHeight": "24px",
+          "letterSpacing": "0.01em",
+          "fontWeight": "300"
+        }],
 
-    #invitation-content.show {
-      display: block;
-      animation: invitationReveal 1s ease forwards;
-    }
+        "body-lg": ["16px", {
+          "lineHeight": "28px",
+          "letterSpacing": "0.01em",
+          "fontWeight": "300"
+        }],
 
-    @keyframes invitationReveal {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        "label-lg": ["13px", {
+          "lineHeight": "18px",
+          "letterSpacing": "0.08em",
+          "fontWeight": "500"
+        }],
 
-    .section {
-      padding: 80px 20px;
-    }
+        "headline-lg": ["36px", {
+          "lineHeight": "48px",
+          "letterSpacing": "0.01em",
+          "fontWeight": "400"
+        }],
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+        "display-lg-mobile": ["34px", {
+          "lineHeight": "44px",
+          "letterSpacing": "0.01em",
+          "fontWeight": "400"
+        }],
 
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      padding: 60px 20px;
-    }
+        "headline-sm": ["20px", {
+          "lineHeight": "28px",
+          "letterSpacing": "0.02em",
+          "fontWeight": "500"
+        }],
 
-    .hero-image {
-      width: min(100%, 420px);
-      height: 520px;
-      object-fit: cover;
-      border-radius: 220px 220px 20px 20px;
-      margin: 35px auto;
-      display: block;
-      box-shadow: 0 20px 50px rgba(92, 58, 45, .15);
-    }
+        "headline-lg-mobile": ["26px", {
+          "lineHeight": "36px",
+          "letterSpacing": "0.01em",
+          "fontWeight": "400"
+        }],
 
-    .image-wrap {
-      position: relative;
-    }
+        "title-md": ["17px", {
+          "lineHeight": "24px",
+          "letterSpacing": "0.03em",
+          "fontWeight": "500"
+        }],
 
-    .image-label {
-      position: absolute;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,.88);
-      padding: 10px 25px;
-      border-radius: 30px;
-      font-family: "Noto Serif", serif;
-      white-space: nowrap;
-    }
+        "headline-md": ["24px", {
+          "lineHeight": "34px",
+          "letterSpacing": "0.02em",
+          "fontWeight": "400"
+        }],
 
-    .eyebrow {
-      letter-spacing: .25em;
-      font-size: 12px;
-      font-weight: 600;
-    }
+        "display-lg": ["48px", {
+          "lineHeight": "60px",
+          "letterSpacing": "0.02em",
+          "fontWeight": "400"
+        }],
 
-    .countdown-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 35px;
-    }
-
-    .count-box {
-      background: white;
-      border-radius: 18px;
-      padding: 22px 10px;
-      box-shadow: 0 8px 30px rgba(92,58,45,.08);
-    }
-
-    .count-number {
-      font-family: "Noto Serif", serif;
-      font-size: 32px;
-      font-weight: 600;
-    }
-
-    .count-label {
-      margin-top: 5px;
-      font-size: 11px;
-      opacity: .65;
-    }
-
-    .detail-card {
-      background: white;
-      border-radius: 24px;
-      padding: 30px;
-      box-shadow: 0 10px 40px rgba(92,58,45,.08);
-      height: 100%;
-    }
-
-    .gallery-image {
-      width: 100%;
-      height: 420px;
-      object-fit: cover;
-      border-radius: 24px;
-      box-shadow: 0 12px 40px rgba(92,58,45,.1);
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      border: 1px solid #ead7d0;
-      border-radius: 14px;
-      padding: 14px 16px;
-      background: #fff;
-      outline: none;
-      font-family: inherit;
-      box-sizing: border-box;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: #b76e5d;
-    }
-
-    .submit-btn {
-      width: 100%;
-      border: none;
-      border-radius: 14px;
-      padding: 16px;
-      background: #b76e5d;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .2s ease;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .calendar-btn {
-      border: none;
-      border-radius: 14px;
-      padding: 14px 20px;
-      background: #f3dfd8;
-      color: #6a453b;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .2s ease;
-    }
-
-    .calendar-btn:hover {
-      background: #ecd1c8;
-    }
-
-    footer {
-      padding: 50px 20px;
-      text-align: center;
-      font-family: "Noto Serif", serif;
-    }
-
-    @media (max-width: 640px) {
-      .countdown-grid {
-        gap: 8px;
-      }
-
-      .count-box {
-        padding: 18px 6px;
-      }
-
-      .count-number {
-        font-size: 25px;
-      }
-
-      .hero-image {
-        height: 450px;
-      }
-
-      .section {
-        padding: 60px 18px;
+        "label-sm": ["11px", {
+          "lineHeight": "16px",
+          "letterSpacing": "0.12em",
+          "fontWeight": "500"
+        }]
       }
     }
-  </style>
+  }
+}
+</script>
 </head>
 
-<body>
+<body class="bg-surface font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen pt-safe pb-safe selection:bg-primary-fixed selection:text-on-primary-fixed">
 
-  <!-- ENVELOPE -->
-  <section id="envelope-section">
-    <div class="envelope-wrapper">
+<main class="flex-1 flex flex-col relative w-full max-w-xl mx-auto bg-surface">
 
-      <div class="eyebrow">
-        ԱՌԱՋԻՆ ՏԱՐԵԴԱՐՁ • 1ST BIRTHDAY
-      </div>
+<div class="flex flex-col w-full relative overflow-hidden px-4 py-6">
 
-      <h1 class="text-4xl md:text-5xl mt-5">
-        Մեր Փոքրիկի 1 Տարեկանը
-      </h1>
+<!-- ====================================================== -->
+<!-- INTERACTIVE ENVELOPE COVER SECTION -->
+<!-- ====================================================== -->
 
-      <p class="mt-5 text-sm md:text-base opacity-70">
-        Բացեք նամակը՝ տեսնելու սիրով պատրաստված մեր հրավիրատոմսը
-      </p>
+<section
+  class="relative w-full rounded-3xl bg-surface-container shadow-xl overflow-hidden transition-all duration-700 ease-in-out p-6 flex flex-col items-center justify-center text-center"
+  id="envelope-section"
+>
 
-      <div class="envelope-card">
+<!-- Decorative Ambient Botanical Corner Accents -->
 
-        <div class="envelope-back"></div>
+<div class="absolute -top-6 -left-6 w-24 h-24 opacity-25 pointer-events-none text-primary">
+<svg fill="currentColor" viewBox="0 0 100 100">
+<path d="M10,80 Q30,40 80,10 Q50,40 40,80 Z"></path>
+<path d="M25,65 Q45,35 75,25 Q50,55 35,70 Z"></path>
+</svg>
+</div>
 
-        <div class="envelope-flap"></div>
+<div class="absolute -bottom-6 -right-6 w-24 h-24 opacity-25 pointer-events-none text-primary rotate-180">
+<svg fill="currentColor" viewBox="0 0 100 100">
+<path d="M10,80 Q30,40 80,10 Q50,40 40,80 Z"></path>
+<path d="M25,65 Q45,35 75,25 Q50,55 35,70 Z"></path>
+</svg>
+</div>
 
-        <div class="envelope-left"></div>
+<!-- Envelope Flap Silhouette -->
 
-        <div class="envelope-right"></div>
+<div class="w-full flex flex-col items-center">
 
-        <div class="envelope-bottom"></div>
+<div class="w-16 h-1 rounded-full bg-primary-container mb-6 opacity-60"></div>
 
-        <button
-          id="open-envelope-btn"
-          class="wax-seal"
-          type="button"
-          aria-label="Բացել հրավիրատոմսը"
-        >
-          Հրավեր
-        </button>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-medium mb-2">
+ԱՌԱՋԻՆ ՏԱՐԵԴԱՐՁ • 1ST BIRTHDAY
+</span>
 
-      </div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-normal mb-1">
+Մեր Փոքրիկի 1 Տարեկանը
+</h2>
 
-      <p class="text-xs opacity-60 tracking-widest">
-        Հպեք՝ Բացելու Համար
-      </p>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs mb-8">
+Բացեք նամակը՝ տեսնելու սիրով պատրաստված մեր հրավիրատոմսը
+</p>
 
-    </div>
-  </section>
+<!-- Wax Seal Interactive Button -->
 
+<button
+  aria-label="Բացել Հրավերը"
+  class="group relative flex flex-col items-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none"
+  id="open-envelope-btn"
+  type="button"
+>
 
-  <!-- INVITATION -->
-  <main id="invitation-content">
+<div class="w-24 h-24 rounded-full bg-gradient-to-br from-secondary-fixed-dim via-primary-container to-primary shadow-xl flex items-center justify-center p-1 relative">
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container">
+<div class="w-full h-full rounded-full bg-gradient-to-tr from-primary to-primary-container flex flex-col items-center justify-center shadow-inner text-surface text-center">
 
-        <div class="eyebrow">
-          1ST BIRTHDAY CELEBRATION
-        </div>
+<span
+  class="material-symbols-outlined text-surface text-2xl mb-0.5"
+  style="font-variation-settings: 'FILL' 1;"
+>
+favorite
+</span>
 
-        <h1 class="text-5xl md:text-7xl mt-6 leading-tight">
-          Մեր հրաշքը դարձավ 1 տարեկան
-        </h1>
+<span class="font-headline-sm text-headline-sm font-semibold text-surface tracking-wide">
+Հրավեր
+</span>
 
-        <p class="mt-7 max-w-xl mx-auto text-base md:text-lg leading-8 opacity-75">
-          «Սիրով հրավիրում ենք նշելու մեր փոքրիկի առաջին տարեդարձը»
-        </p>
+</div>
+</div>
 
-        <div class="image-wrap">
-          <img
-            class="hero-image"
-            src="https://cdn.shopify.com/s/files/1/1019/7699/8171/files/4c1a25ae298191f3768afc8ad6e5337c.jpg?v=1790253270"
-            alt="Մեր փոքրիկը"
-          />
+<span class="mt-4 inline-flex items-center gap-1.5 font-label-lg text-label-lg text-primary font-medium tracking-wider">
 
-          <div class="image-label">
-            Մեր Լույսը
-          </div>
-        </div>
+<span>
+Հպեք՝ Բացելու Համար
+</span>
 
-        <p class="max-w-2xl mx-auto text-sm md:text-base leading-8 opacity-75">
-          Արդեն մեկ տարի է, ինչ մեր տունը լցվել է անսահման ծիծաղով և երջանկությամբ։
-          Ուրախ ենք հրավիրել Ձեզ՝ միասին նշելու մեր բալիկի 1-ամյակի ջերմ և լուսավոր տոնը։
-        </p>
+<span class="material-symbols-outlined text-base transition-transform group-hover:translate-y-0.5">
+expand_more
+</span>
 
-      </div>
-    </section>
+</span>
 
+</button>
 
-    <!-- COUNTDOWN -->
-    <section class="section">
-      <div class="container text-center">
+<!-- Subtle Foil Details -->
 
-        <div class="eyebrow">
-          ՄՆԱՑԵԼ Է
-        </div>
+<div class="flex items-center gap-2 mt-8 opacity-40">
 
-        <h2 class="text-4xl md:text-5xl mt-4">
-          Մինչև 1-ամյակի Խնջույքը
-        </h2>
+<span class="w-12 h-px bg-outline"></span>
 
-        <div class="countdown-grid">
+<span class="material-symbols-outlined text-xs text-secondary">
+star
+</span>
 
-          <div class="count-box">
-            <div id="days" class="count-number">00</div>
-            <div class="count-label">ՕՐ</div>
-          </div>
+<span class="w-12 h-px bg-outline"></span>
 
-          <div class="count-box">
-            <div id="hours" class="count-number">00</div>
-            <div class="count-label">ԺԱՄ</div>
-          </div>
+</div>
 
-          <div class="count-box">
-            <div id="minutes" class="count-number">00</div>
-            <div class="count-label">ՐՈՊԵ</div>
-          </div>
+</div>
 
-          <div class="count-box">
-            <div id="seconds" class="count-number">00</div>
-            <div class="count-label">ՎԱՅՐԿՅԱՆ</div>
-          </div>
+</section>
 
-        </div>
 
-      </div>
-    </section>
+<!-- ====================================================== -->
+<!-- LETTERFOLD KEEPSAKE FOLIO / INVITATION CONTENT -->
+<!-- HIDDEN UNTIL ENVELOPE IS OPENED -->
+<!-- ====================================================== -->
 
+<div
+  class="w-full flex flex-col gap-10 mt-6 transition-all duration-1000 ease-out"
+  id="invitation-content"
+>
 
-    <!-- EVENT DETAILS -->
-    <section class="section">
-      <div class="container">
 
-        <div class="text-center mb-12">
+<!-- ====================================================== -->
+<!-- 1. HERO SECTION -->
+<!-- ====================================================== -->
 
-          <div class="eyebrow">
-            ՕՐԱԿԱՐԳ ԵՎ ՎԱՅՐ
-          </div>
+<section class="relative w-full rounded-3xl bg-surface-container-low p-6 sm:p-8 shadow-sm flex flex-col items-center text-center overflow-hidden">
 
-          <h2 class="text-4xl md:text-5xl mt-4">
-            Հանդիսության Մանրամասները
-          </h2>
+<!-- Floating Accent Butterflies -->
 
-        </div>
+<div class="absolute top-4 right-5 w-8 h-8 text-primary-container opacity-70 animate-pulse pointer-events-none">
 
-        <div class="grid md:grid-cols-2 gap-6">
+<svg fill="currentColor" viewBox="0 0 24 24">
+<path d="M12 4.5C10.5 2 7 1.5 4.5 3.5C2 5.5 2 9 4.5 12C6.5 14.5 10 17 12 19.5C14 17 17.5 14.5 19.5 12C22 9 22 5.5 19.5 3.5C17 1.5 13.5 2 12 4.5Z"></path>
+</svg>
 
-          <!-- DATE -->
-          <div class="detail-card">
+</div>
 
-            <div class="text-sm opacity-60 mb-3">
-              Ամսաթիվ Եվ Ժամ
-            </div>
+<div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface shadow-sm mb-4">
 
-            <h3 class="text-2xl">
-              Երեքշաբթի, 24 Նոյեմբերի, 2026
-            </h3>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
 
-            <p class="mt-4 opacity-70">
-              Սկիզբը՝ 16:00-ին
-            </p>
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase font-semibold">
+1ST BIRTHDAY CELEBRATION
+</span>
 
-          </div>
+</div>
 
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-on-surface font-normal leading-tight mb-3">
+Մեր հրաշքը դարձավ 1 տարեկան
+</h1>
 
-          <!-- VENUE -->
-          <div class="detail-card">
+<p class="font-headline-sm text-headline-sm text-primary font-normal italic mb-6">
+«Սիրով հրավիրում ենք նշելու մեր փոքրիկի առաջին տարեդարձը»
+</p>
 
-            <div class="text-sm opacity-60 mb-3">
-              Վայր
-            </div>
+<!-- Primary Featured Photograph of the Baby -->
 
-            <h3 class="text-2xl">
-              «Villa Rose» Հանդիսությունների Սրահ
-            </h3>
+<div class="relative w-full max-w-sm mx-auto mb-6 rounded-3xl overflow-hidden shadow-xl bg-surface-container-highest">
 
-            <p class="mt-4 opacity-70">
-              Ծաղկազարդ Այգի, Երևան
-            </p>
+<img
+  alt="Մեր Լույսը"
+  class="w-full h-80 object-cover rounded-3xl shadow-xl border-4 border-white/80"
+  src="https://cdn.shopify.com/s/files/1/1019/7699/8171/files/4c1a25ae298191f3768afc8ad6e5337c.jpg?v=1790253270"
+>
 
-            <a
-              href="https://www.google.com/maps/search/?api=1&query=Villa+Rose+Yerevan"
-              target="_blank"
-              class="inline-block mt-5 underline"
-            >
-              «Villa Rose» Երևան
-            </a>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/40 via-transparent to-transparent pointer-events-none"></div>
 
-          </div>
+<div class="absolute bottom-3 left-4 right-4 text-left">
 
-        </div>
+<span class="font-label-sm text-label-sm text-surface font-medium uppercase tracking-wider opacity-90 drop-shadow">
+1ST BIRTHDAY CELEBRATION
+</span>
 
-        <div class="text-center mt-8">
+<p class="font-headline-sm text-headline-sm text-surface drop-shadow font-normal">
+Մեր Լույսը
+</p>
 
-          <button
-            class="calendar-btn"
-            onclick="copyEventInfo()"
-          >
-            Ավելացնել Օրացույցին
-          </button>
+</div>
 
-        </div>
+</div>
 
-      </div>
-    </section>
+<!-- Warm Invitation Message -->
 
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto leading-relaxed">
+Արդեն մեկ տարի է, ինչ մեր տունը լցվել է անսահման ծիծաղով և երջանկությամբ։ Ուրախ ենք հրավիրել Ձեզ՝ միասին նշելու մեր բալիկի 1-ամյակի ջերմ և լուսավոր տոնը։
+</p>
 
-    <!-- GALLERY -->
-    <section class="section">
-      <div class="container">
+</section>
 
-        <div class="text-center mb-12">
 
-          <div class="eyebrow">
-            ԼՈՒՍԱՆԿԱՐՆԵՐԻ ՍՐԱՀ
-          </div>
+<!-- ====================================================== -->
+<!-- 2. COUNTDOWN TIMER SECTION -->
+<!-- ====================================================== -->
 
-          <h2 class="text-4xl md:text-5xl mt-4">
-            Առաջին Տարվա Լուսավոր Պահեր
-          </h2>
+<section class="w-full rounded-3xl bg-surface-container p-6 shadow-sm flex flex-col items-center text-center">
 
-          <p class="max-w-xl mx-auto mt-5 opacity-70 leading-7">
-            Յուրաքանչյուր ժպիտ ու ջերմ հայացք մեր փոքրիկի առաջին տարվա
-            անմոռանալի պատմությունն է
-          </p>
+<div class="flex items-center gap-2 mb-2">
 
-        </div>
+<span
+  class="material-symbols-outlined text-secondary text-lg"
+  style="font-variation-settings: 'FILL' 1;"
+>
+schedule
+</span>
 
-        <div class="grid md:grid-cols-2 gap-6">
+<span class="font-label-lg text-label-lg text-secondary tracking-widest uppercase font-semibold">
+Մնացել Է
+</span>
 
-          <img
-            class="gallery-image"
-            src="https://cdn.shopify.com/s/files/1/1019/7699/8171/files/4c1a25ae298191f3768afc8ad6e5337c.jpg?v=1790253270"
-            alt="Լուսանկար"
-          />
+</div>
 
-          <img
-            class="gallery-image"
-            src="https://cdn.shopify.com/s/files/1/1019/7699/8171/files/265cad4b020a60bc819b997054d72e6f.jpg?v=1790253274"
-            alt="Լուսանկար"
-          />
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6">
+Մինչև 1-ամյակի Խնջույքը
+</h3>
 
-        </div>
 
-      </div>
-    </section>
+<!-- Dynamic Countdown Timer Units -->
 
+<div
+  class="grid grid-cols-4 gap-2 w-full max-w-sm"
+  id="countdown-grid"
+>
 
-    <!-- RSVP -->
-    <section class="section">
-      <div class="container">
+<div class="rounded-2xl bg-surface p-3 shadow-sm">
 
-        <div class="max-w-2xl mx-auto">
+<div
+  class="font-headline-md text-headline-md text-primary"
+  id="days"
+>
+00
+</div>
 
-          <div class="text-center mb-10">
+<div class="font-label-sm text-label-sm text-secondary mt-1">
+ՕՐ
+</div>
 
-            <div class="eyebrow">
-              ՀԱՍՏԱՏԵՔ ՁԵՐ ՆԵՐԿԱՅՈՒԹՅՈՒՆԸ
-            </div>
+</div>
 
-            <h2 class="text-4xl md:text-5xl mt-4">
-              Կլինե՞ք Մեզ Հետ
-            </h2>
 
-            <p class="mt-5 opacity-70 leading-7">
-              Շնորհակալ ենք, որ մեր կողքին եք և կիսում եք մեր ուրախությունը՝
-              նշելու մեր բալիկի 1 տարեկանը։
-              Ձեր ներկայությունը մեզ համար ամենամեծ նվերն է։
-            </p>
+<div class="rounded-2xl bg-surface p-3 shadow-sm">
 
-          </div>
+<div
+  class="font-headline-md text-headline-md text-primary"
+  id="hours"
+>
+00
+</div>
 
+<div class="font-label-sm text-label-sm text-secondary mt-1">
+ԺԱՄ
+</div>
 
-          <form
-            id="rsvp-form"
-            class="detail-card"
-          >
+</div>
 
-            <div class="mb-5">
 
-              <label class="block text-sm mb-2">
-                Ձեր Անունը և Ազգանունը
-              </label>
+<div class="rounded-2xl bg-surface p-3 shadow-sm">
 
-              <input
-                type="text"
-                required
-                placeholder="Օրինակ՝ Անի և Արամ"
-              />
+<div
+  class="font-headline-md text-headline-md text-primary"
+  id="minutes"
+>
+00
+</div>
 
-            </div>
+<div class="font-label-sm text-label-sm text-secondary mt-1">
+ՐՈՊԵ
+</div>
 
+</div>
 
-            <div class="mb-5">
 
-              <label class="block text-sm mb-2">
-                Մասնակցության Կարգավիճակ
-              </label>
+<div class="rounded-2xl bg-surface p-3 shadow-sm">
 
-              <select required>
+<div
+  class="font-headline-md text-headline-md text-primary"
+  id="seconds"
+>
+00
+</div>
 
-                <option value="">
-                  Ընտրել
-                </option>
+<div class="font-label-sm text-label-sm text-secondary mt-1">
+ՎԱՅՐԿՅԱՆ
+</div>
 
-                <option>
-                  Սիրով կգամ
-                </option>
+</div>
 
-                <option>
-                  Չեմ կարող
-                </option>
+</div>
 
-              </select>
+</section>
 
-            </div>
 
+<!-- ====================================================== -->
+<!-- 3. EVENT DETAILS & TIMING SECTION -->
+<!-- ====================================================== -->
 
-            <div class="mb-6">
+<section class="w-full rounded-3xl bg-surface-container-low p-6 shadow-sm flex flex-col gap-6">
 
-              <label class="block text-sm mb-2">
-                Բարեմաղթանք կամ Մաղթանքներ (ըստ ցանկության)
-              </label>
+<div class="text-center mb-1">
 
-              <textarea
-                rows="4"
-                placeholder="Գրեք Ձեր բարեմաղթանքը..."
-              ></textarea>
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase font-semibold">
+Օրակարգ Եվ Վայր
+</span>
 
-            </div>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">
+Հանդիսության Մանրամասները
+</h3>
 
+</div>
 
-            <button
-              type="submit"
-              class="submit-btn"
-            >
-              Հաստատել մասնակցությունը
-            </button>
 
-          </form>
+<!-- Date & Time Card -->
 
+<div class="flex items-start gap-4 p-4 rounded-2xl bg-surface shadow-sm">
 
-          <div
-            id="rsvp-success"
-            class="hidden text-center detail-card mt-6"
-          >
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-on-primary-fixed shrink-0 shadow-inner">
 
-            <h3 class="text-3xl">
-              Շնորհակալություն։
-            </h3>
+<span
+  class="material-symbols-outlined text-2xl"
+  style="font-variation-settings: 'FILL' 1;"
+>
+calendar_month
+</span>
 
-            <p class="mt-4 opacity-70">
-              Ձեր պատասխանը սիրով գրանցված է։
-              Անհամբեր սպասում ենք մեր հանդիպմանը։
-            </p>
+</div>
 
-          </div>
+<div class="flex-1 min-w-0">
 
-        </div>
+<span class="font-label-sm text-label-sm text-secondary font-medium uppercase tracking-wider">
+Ամսաթիվ Եվ Ժամ
+</span>
 
-      </div>
-    </section>
+<h4 class="font-title-md text-title-md text-on-surface mt-0.5">
+Երեքշաբթի, 24 Նոյեմբերի, 2026
+</h4>
 
+<p class="font-body-md text-body-md text-on-surface-variant">
+Սկիզբը՝ 16:00-ին
+</p>
 
-    <!-- FOOTER -->
-    <footer>
+</div>
 
-      <div class="text-2xl">
-        Սիրով և Երախտագիտությամբ
-      </div>
+</div>
 
-      <div class="text-xs tracking-widest opacity-50 mt-4">
-        1ST BIRTHDAY CELEBRATION • 2026
-      </div>
 
-    </footer>
+<!-- Venue Card -->
 
-  </main>
+<div class="flex items-start gap-4 p-4 rounded-2xl bg-surface shadow-sm">
 
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0 shadow-inner">
 
-  <script>
+<span
+  class="material-symbols-outlined text-2xl"
+  style="font-variation-settings: 'FILL' 1;"
+>
+location_on
+</span>
 
-    /* OPEN ENVELOPE */
+</div>
 
-    const openEnvelopeBtn =
-      document.getElementById("open-envelope-btn");
+<div class="flex-1 min-w-0">
 
-    const envelopeSection =
-      document.getElementById("envelope-section");
+<span class="font-label-sm text-label-sm text-secondary font-medium uppercase tracking-wider">
+Հասցե
+</span>
 
-    const invitationContent =
-      document.getElementById("invitation-content");
+<h4 class="font-title-md text-title-md text-on-surface mt-0.5">
+«Villa Rose» Հանդիսությունների Սրահ
+</h4>
 
+<p class="font-body-md text-body-md text-on-surface-variant">
+Ծաղկազարդ Այգի, Երևան
+</p>
 
-    if (
-      openEnvelopeBtn &&
-      envelopeSection &&
-      invitationContent
-    ) {
+</div>
 
-      openEnvelopeBtn.addEventListener("click", () => {
+</div>
 
-        openEnvelopeBtn.disabled = true;
 
-        openEnvelopeBtn.style.transform =
-          "translate(-50%, -50%) scale(0.92)";
+<!-- Map Location Placeholder -->
 
+<div class="w-full flex flex-col gap-3">
 
-        setTimeout(() => {
+<div
+  class="w-full h-44 rounded-2xl bg-cover bg-center shadow-sm relative overflow-hidden"
+  data-location="Villa Rose Restaurant Yerevan"
+  style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDWUwe_F8U-JpKH2VYNS5b-UgI_g9vpGMwiWkU2ZhCbbJt5wPAVPfoVKZqynS3JWYIXhA_O-QGzS5-wuCsQujhfkyynqEA85iYN7vv-aA2mEfHiHoslZXAIoLlH8xPUGyG_niWaNwfck7RR_iChEHyeALccBme-QjKVqfDV9wq-Mfcc1wiA6yke349v2ZfasrFiCUvlJCRpS_EPoPDGd1N0oSHxuAonugaeJSMbxL4')"
+>
 
-          openEnvelopeBtn.style.transform =
-            "translate(-50%, -50%)";
+<div class="absolute inset-0 bg-inverse-surface/20"></div>
 
-          envelopeSection.classList.add("opening");
+<div class="absolute bottom-3 left-3 bg-surface/95 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow">
 
+<span class="material-symbols-outlined text-primary text-sm">
+place
+</span>
 
-          setTimeout(() => {
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">
+«Villa Rose» Երևան
+</span>
 
-            envelopeSection.style.display = "none";
+</div>
 
-            invitationContent.classList.add("show");
+</div>
 
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth"
-            });
 
-          }, 750);
+<!-- Venue Navigation Actions -->
 
-        }, 180);
+<div class="grid grid-cols-2 gap-2 mt-1">
 
-      });
+<a
+  class="flex items-center justify-center gap-1.5 py-3 px-4 rounded-full bg-surface-container-high text-on-surface font-label-lg text-label-lg shadow-sm active:scale-95 transition-transform text-center"
+  href="https://maps.google.com"
+  rel="noopener noreferrer"
+  target="_blank"
+>
 
-    }
+<span class="material-symbols-outlined text-base">
+near_me
+</span>
 
+<span>
+Դիտել քարտեզը
+</span>
 
-    /* COUNTDOWN */
+</a>
 
-    const targetDate =
-      new Date("November 24, 2026 16:00:00").getTime();
 
+<button
+  class="flex items-center justify-center gap-1.5 py-3 px-4 rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-label-lg shadow-sm active:scale-95 transition-transform text-center"
+  onclick="navigator.clipboard && navigator.clipboard.writeText('«Villa Rose», Երևան, Երեքշաբթի, 24 Նոյեմբերի, 2026, 16:00'); alert('Հասցեն և ժամը պատճենվեցին։');"
+  type="button"
+>
 
-    function updateCountdown() {
+<span class="material-symbols-outlined text-base">
+event
+</span>
 
-      const now = new Date().getTime();
+<span>
+Պահել օրացույցում
+</span>
 
-      const difference = targetDate - now;
+</button>
 
+</div>
 
-      if (difference <= 0) {
+</div>
 
-        document.getElementById("days").textContent = "00";
-        document.getElementById("hours").textContent = "00";
-        document.getElementById("minutes").textContent = "00";
-        document.getElementById("seconds").textContent = "00";
+</section>
 
-        return;
 
-      }
+<!-- ====================================================== -->
+<!-- 4. PHOTO GALLERY SECTION -->
+<!-- ====================================================== -->
 
+<section class="w-full flex flex-col gap-4">
 
-      const days =
-        Math.floor(
-          difference / (1000 * 60 * 60 * 24)
-        );
+<div class="text-center px-4">
 
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase font-semibold">
+Լուսանկարների Սրահ
+</span>
 
-      const hours =
-        Math.floor(
-          (difference / (1000 * 60 * 60)) % 24
-        );
+<h3 class="font-headline-md text-headline-md text-on-surface mt-1">
+Առաջին Տարվա Լուսավոր Պահեր
+</h3>
 
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+Յուրաքանչյուր ժպիտ ու ջերմ հայացք մեր փոքրիկի առաջին տարվա անմոռանալի պատմությունն է
+</p>
 
-      const minutes =
-        Math.floor(
-          (difference / (1000 * 60)) % 60
-        );
+</div>
 
 
-      const seconds =
-        Math.floor(
-          (difference / 1000) % 60
-        );
+<!-- Authentic Grid Display using User's Real Images -->
 
+<div class="grid grid-cols-2 gap-3 w-full">
 
-      document.getElementById("days").textContent =
-        String(days).padStart(2, "0");
 
-      document.getElementById("hours").textContent =
-        String(hours).padStart(2, "0");
+<!-- Photo 1 -->
 
-      document.getElementById("minutes").textContent =
-        String(minutes).padStart(2, "0");
+<div class="flex flex-col gap-2">
 
-      document.getElementById("seconds").textContent =
-        String(seconds).padStart(2, "0");
+<div class="w-full rounded-2xl overflow-hidden shadow-md bg-surface-container-highest">
 
-    }
+<img
+  alt="Փոքրիկի լուսանկար"
+  class="w-full h-64 object-cover rounded-2xl shadow-md border-2 border-white/70"
+  src="https://cdn.shopify.com/s/files/1/1019/7699/8171/files/4c1a25ae298191f3768afc8ad6e5337c.jpg?v=1790253270"
+>
 
+</div>
 
-    updateCountdown();
+</div>
 
-    setInterval(updateCountdown, 1000);
 
+<!-- Photo 2 -->
 
-    /* COPY EVENT INFO */
+<div class="flex flex-col gap-2">
 
-    function copyEventInfo() {
+<div class="w-full rounded-2xl overflow-hidden shadow-md bg-surface-container-highest">
 
-      const eventInfo =
-        "«Villa Rose», Երևան, Երեքշաբթի, 24 Նոյեմբերի, 2026, 16:00";
+<img
+  alt="Մայրիկի և բալիկի ձեռքը"
+  class="w-full h-64 object-cover rounded-2xl shadow-md border-2 border-white/70"
+  src="https://cdn.shopify.com/s/files/1/1019/7699/8171/files/265cad4b020a60bc819b997054d72e6f.jpg?v=1790253274"
+>
 
+</div>
 
-      navigator.clipboard
-        .writeText(eventInfo)
-        .then(() => {
+</div>
 
-          alert("Հասցեն և ժամը պատճենվեցին։");
+</div>
 
-        })
-        .catch(() => {
+</section>
 
-          alert(eventInfo);
 
+<!-- ====================================================== -->
+<!-- 5. RSVP & WARM CLOSING SECTION -->
+<!-- ====================================================== -->
+
+<section class="w-full rounded-3xl bg-surface-container p-6 shadow-sm flex flex-col items-center text-center relative overflow-hidden">
+
+<!-- Delicate Floating SVG Butterfly Accent -->
+
+<div class="w-10 h-10 text-primary opacity-60 mb-2">
+
+<svg fill="currentColor" viewBox="0 0 24 24">
+
+<path d="M12 2C10.5 4 7 4.5 4.5 7C2 9.5 2 13 4.5 15.5C7 18 10 18.5 12 21C14 18.5 17 18 19.5 15.5C22 13 22 9.5 19.5 7C17 4.5 13.5 4 12 2Z"></path>
+
+</svg>
+
+</div>
+
+
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">
+Հաստատեք Ձեր Ներկայությունը
+</h3>
+
+
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm mb-6">
+Շնորհակալ ենք, որ մեր կողքին եք և կիսում եք մեր ուրախությունը՝ նշելու մեր բալիկի 1 տարեկանը։ Ձեր ներկայությունը մեզ համար ամենամեծ նվերն է։
+</p>
+
+
+<!-- Interactive RSVP Form Card -->
+
+<form
+  class="w-full max-w-sm flex flex-col gap-3 text-left bg-surface rounded-2xl p-4 shadow-sm"
+  id="rsvp-form"
+  onsubmit="event.preventDefault(); document.getElementById('rsvp-success').classList.remove('hidden'); this.classList.add('hidden');"
+>
+
+<div>
+
+<label
+  class="font-label-sm text-label-sm text-on-surface-variant uppercase font-medium block mb-1"
+  for="guest-name"
+>
+Ձեր Անունը և Ազգանունը
+</label>
+
+<input
+  class="w-full px-4 py-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-outline"
+  id="guest-name"
+  placeholder="Օրինակ՝ Անի և Արամ"
+  required=""
+  type="text"
+>
+
+</div>
+
+
+<div>
+
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase font-medium block mb-1.5">
+Մասնակցության Կարգավիճակ
+</label>
+
+<div class="grid grid-cols-2 gap-2">
+
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low cursor-pointer">
+
+<input
+  checked=""
+  class="accent-primary"
+  name="attendance"
+  type="radio"
+  value="yes"
+>
+
+<span class="font-label-lg text-label-lg text-on-surface">
+Սիրով կգամ
+</span>
+
+</label>
+
+
+<label class="flex items-center gap-2 p-2.5 rounded-xl bg-surface-container-low cursor-pointer">
+
+<input
+  class="accent-primary"
+  name="attendance"
+  type="radio"
+  value="no"
+>
+
+<span class="font-label-lg text-label-lg text-on-surface">
+Չեմ կարող
+</span>
+
+</label>
+
+</div>
+
+</div>
+
+
+<div>
+
+<label
+  class="font-label-sm text-label-sm text-on-surface-variant uppercase font-medium block mb-1"
+  for="guest-wishes"
+>
+Բարեմաղթանք կամ Մաղթանքներ (ըստ ցանկության)
+</label>
+
+<textarea
+  class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-outline"
+  id="guest-wishes"
+  rows="2"
+></textarea>
+
+</div>
+
+
+<button
+  class="w-full py-3.5 mt-2 rounded-full bg-gradient-to-r from-primary-container via-primary to-primary text-on-primary font-label-lg text-label-lg tracking-wider uppercase shadow-md active:scale-95 transition-transform flex items-center justify-center gap-2"
+  type="submit"
+>
+
+<span class="material-symbols-outlined text-base">
+check_circle
+</span>
+
+<span>
+Հաստատել մասնակցությունը
+</span>
+
+</button>
+
+</form>
+
+
+<!-- Confirmation Feedback Toast / Card -->
+
+<div
+  class="hidden w-full max-w-sm p-6 rounded-2xl bg-surface shadow-md flex flex-col items-center text-center"
+  id="rsvp-success"
+>
+
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed mb-3">
+
+<span
+  class="material-symbols-outlined text-2xl"
+  style="font-variation-settings: 'FILL' 1;"
+>
+favorite
+</span>
+
+</div>
+
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">
+Շնորհակալություն։
+</h4>
+
+<p class="font-body-md text-body-md text-on-surface-variant">
+Ձեր պատասխանը սիրով գրանցված է։ Անհամբեր սպասում ենք մեր հանդիպմանը։
+</p>
+
+</div>
+
+
+<!-- Bottom Blessing Signature -->
+
+<div class="mt-8 flex flex-col items-center">
+
+<span class="font-headline-sm text-headline-sm text-primary italic font-normal">
+Սիրով և Երախտագիտությամբ
+</span>
+
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase mt-1">
+1ST BIRTHDAY CELEBRATION • 2026
+</span>
+
+</div>
+
+</section>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================================================
+   ENVELOPE OPENING
+   ========================================================= */
+
+const openEnvelopeBtn =
+  document.getElementById('open-envelope-btn');
+
+const envelopeSection =
+  document.getElementById('envelope-section');
+
+const invitationContent =
+  document.getElementById('invitation-content');
+
+
+if (
+  openEnvelopeBtn &&
+  envelopeSection &&
+  invitationContent
+) {
+
+  openEnvelopeBtn.addEventListener('click', () => {
+
+    /* Prevent double click */
+    openEnvelopeBtn.disabled = true;
+
+    /* Small button press animation */
+    openEnvelopeBtn.style.transform = 'scale(0.92)';
+
+    setTimeout(() => {
+
+      openEnvelopeBtn.style.transform = '';
+
+      /*
+       * First:
+       * Closed envelope smoothly disappears
+       */
+      envelopeSection.classList.add('opening');
+
+
+      /*
+       * Then:
+       * Invitation content appears
+       */
+      setTimeout(() => {
+
+        envelopeSection.style.display = 'none';
+
+        invitationContent.classList.add('show');
+
+        /*
+         * Start invitation from the top
+         */
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
         });
 
+      }, 750);
+
+    }, 180);
+
+  });
+
+}
+
+
+/* =========================================================
+   LIVE COUNTDOWN
+   EVENT DATE:
+   NOVEMBER 24, 2026 — 16:00
+   ========================================================= */
+
+const targetDate =
+  new Date('November 24, 2026 16:00:00').getTime();
+
+
+function updateCountdown() {
+
+  const now =
+    new Date().getTime();
+
+  const difference =
+    targetDate - now;
+
+
+  /*
+   * Event already started
+   */
+
+  if (difference <= 0) {
+
+    const grid =
+      document.getElementById('countdown-grid');
+
+    if (grid) {
+
+      grid.innerHTML =
+        '<div class="col-span-4 py-3 font-headline-sm text-headline-sm text-primary">Հանդիսությունը մեկնարկել է</div>';
+
     }
 
+    return;
 
-    /* RSVP */
-
-    const rsvpForm =
-      document.getElementById("rsvp-form");
-
-    const rsvpSuccess =
-      document.getElementById("rsvp-success");
+  }
 
 
-    if (rsvpForm) {
+  /*
+   * Calculate remaining time
+   */
 
-      rsvpForm.addEventListener("submit", (event) => {
+  const days =
+    Math.floor(
+      difference /
+      (1000 * 60 * 60 * 24)
+    );
 
-        event.preventDefault();
 
-        rsvpForm.style.display = "none";
+  const hours =
+    Math.floor(
+      (difference %
+      (1000 * 60 * 60 * 24)) /
+      (1000 * 60 * 60)
+    );
 
-        rsvpSuccess.classList.remove("hidden");
 
-      });
+  const minutes =
+    Math.floor(
+      (difference %
+      (1000 * 60 * 60)) /
+      (1000 * 60)
+    );
 
-    }
 
-  </script>
+  const seconds =
+    Math.floor(
+      (difference %
+      (1000 * 60)) /
+      1000
+    );
+
+
+  /*
+   * Update countdown numbers
+   */
+
+  const dEl =
+    document.getElementById('days');
+
+  const hEl =
+    document.getElementById('hours');
+
+  const mEl =
+    document.getElementById('minutes');
+
+  const sEl =
+    document.getElementById('seconds');
+
+
+  if (dEl) {
+
+    dEl.innerText =
+      String(days).padStart(2, '0');
+
+  }
+
+
+  if (hEl) {
+
+    hEl.innerText =
+      String(hours).padStart(2, '0');
+
+  }
+
+
+  if (mEl) {
+
+    mEl.innerText =
+      String(minutes).padStart(2, '0');
+
+  }
+
+
+  if (sEl) {
+
+    sEl.innerText =
+      String(seconds).padStart(2, '0');
+
+  }
+
+}
+
+
+/*
+ * Run immediately
+ */
+updateCountdown();
+
+
+/*
+ * Update every second
+ */
+setInterval(updateCountdown, 1000);
+
+</script>
+
+</main>
 
 </body>
 </html>
